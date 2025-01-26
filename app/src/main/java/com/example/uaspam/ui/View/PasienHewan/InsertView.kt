@@ -28,10 +28,36 @@ import com.example.uaspam.ui.ViewModel.PasienHewan.InsertViewModel
 import com.example.uaspam.ui.ViewModel.PenyediaViewModel
 import com.example.uaspam.ui.customwidget.CostumeTopAppBar
 import com.example.uaspam.ui.navigation.DestinasiEntry
-
 import kotlinx.coroutines.launch
 
-
+@Composable
+fun EntryBody(
+    insertUiState: InsertUiState,
+    jnsList: List<Jenishewan>,
+    onPasienValueChange: (InsertUiEvent) -> Unit,
+    onSaveClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(18.dp),
+        modifier = modifier.padding(12.dp)
+    ) {
+        FormInput(
+            insertUiEvent = insertUiState.insertUiEvent,
+            insertUiState = insertUiState,
+            jnsList = jnsList,
+            onValueChange = onPasienValueChange,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Button(
+            onClick = onSaveClick,
+            shape = MaterialTheme.shapes.small,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = "Simpan")
+        }
+    }
+}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormInput(
