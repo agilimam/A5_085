@@ -27,6 +27,8 @@ object PenyediaViewModel {
     val Factory = viewModelFactory {
         initializer { HomeViewModel(aplikasiHewan().container.pasienHewanRepository,aplikasiHewan().container.jenisHewanRepository)}
         initializer { InsertViewModel(aplikasiHewan().container.pasienHewanRepository,aplikasiHewan().container.jenisHewanRepository) }
+        initializer { DetailViewModel(createSavedStateHandle(),aplikasiHewan().container.pasienHewanRepository,aplikasiHewan().container.jenisHewanRepository) }
+
     }
 }
 
