@@ -31,6 +31,66 @@ import com.example.uaspam.ui.navigation.DestinasiHomeJenis
 
 
 @Composable
+fun JnsCard(
+    jenishewan: Jenishewan,
+    modifier: Modifier = Modifier,
+    onEditJenisClick: (Jenishewan) -> Unit = {},
+    onDeleteJenisClick: (Jenishewan) -> Unit = {}
+) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    if (showDialog) {
+        DeleteConfirmationDialog(
+            onDeleteConfirm = {
+                showDialog = false
+                onDeleteJenisClick(jenishewan)
+            },
+            onDeleteCancel = {
+                showDialog = false
+            }
+        )
+    }
+
+    Card(
+        modifier = modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+            .heightIn(min = 80.dp, max = 120.dp),
+        shape = MaterialTheme.shapes.medium,
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(
+            modifier = Modifier.padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(
+                text = "Jenis Hewan: ${jenishewan.nama_jenis_hewan}",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Text(
+                text = "Deskripsi hewan : ${jenishewan.deskripsi}",
+                style = MaterialTheme.typography.bodySmall
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Spacer(modifier = Modifier.width(4.dp))
+                TextButton(onClick = { onEditJenisClick(jenishewan) }) {
+                    Text("Edit", style = MaterialTheme.typography.labelSmall)
+                }
+                Spacer(modifier = Modifier.width(4.dp))
+                TextButton(onClick = { showDialog = true }) {
+                    Text("Hapus", style = MaterialTheme.typography.labelSmall)
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun DeleteConfirmationDialog(
     onDeleteConfirm: () -> Unit,
     onDeleteCancel: () -> Unit,
