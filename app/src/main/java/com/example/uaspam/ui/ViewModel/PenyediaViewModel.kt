@@ -28,6 +28,10 @@ object PenyediaViewModel {
         initializer { HomeViewModel(aplikasiHewan().container.pasienHewanRepository,aplikasiHewan().container.jenisHewanRepository)}
         initializer { InsertViewModel(aplikasiHewan().container.pasienHewanRepository,aplikasiHewan().container.jenisHewanRepository) }
         initializer { DetailViewModel(createSavedStateHandle(),aplikasiHewan().container.pasienHewanRepository,aplikasiHewan().container.jenisHewanRepository) }
+        initializer { UpdateViewModel(createSavedStateHandle(),aplikasiHewan().container.pasienHewanRepository,aplikasiHewan().container.jenisHewanRepository) }
+
+        //JENIS HEWAN
+        initializer { HomeJenisViewModel(aplikasiHewan().container.jenisHewanRepository) }
 
     }
 }
