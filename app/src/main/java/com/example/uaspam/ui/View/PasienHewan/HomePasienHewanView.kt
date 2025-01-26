@@ -7,19 +7,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -34,6 +27,182 @@ import com.example.uaspam.ui.ViewModel.PasienHewan.HomeViewModel
 import com.example.uaspam.ui.customwidget.CostumeTopAppBar
 import com.example.uaspam.ui.navigation.DestinasiHome
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreen(
+    navigateToItemEntry: () -> Unit,
+    navigateToJenisHewanManagement: () -> Unit,
+    navigateToDokterManagement: () -> Unit,
+    navigateToPerawatanManagement: () -> Unit,
+    modifier: Modifier = Modifier,
+    onDetailClick: (Int) -> Unit = {},
+    onEditClick: (PasienHewan) -> Unit = {},
+    viewModel: HomeViewModel = viewModel(factory = PenyediaViewModel.Factory)
+) {
+    var selectedIndex by remember { mutableStateOf(0) }
+
+    Scaffold(
+        topBar = {
+            CostumeTopAppBar(
+                title = DestinasiHome.titleRes,
+                canNavigateBack = false,
+                onRefresh = { viewModel.getPsn() }
+            )
+        },
+        bottomBar = {
+            NavigationBar(
+                containerColor = Color(0xFFBBDEFB),
+            ) {
+                NavigationBarItem(
+                    selected = selectedIndex == 0,
+                    onClick = {
+                        selectedIndex = 0
+                        navigateToItemEntry()
+                    },
+                    icon = {
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(
+                                    color = Color(0xFFE3F2FD),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                                .padding(8.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.pasien),
+                                contentDescription = "Tambah Pasien",
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                    },
+                )
+                NavigationBarItem(
+                    selected = selectedIndex == 1,
+                    onClick = {
+                        selectedIndex = 1
+                        navigateToJenisHewanManagement()
+                    },
+                    icon = {
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(
+                                    color = Color(0xFFE3F2FD),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                                .padding(8.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.jenishewan),
+                                contentDescription = "Jenis Hewan",
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                    },
+                )
+                NavigationBarItem(
+                    selected = selectedIndex == 2,
+                    onClick = {
+                        selectedIndex = 2
+                        navigateToDokterManagement()
+                    },
+                    icon = {
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(
+                                    color = Color(0xFFE3F2FD),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                                .padding(8.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.dokter),
+                                contentDescription = "Dokter",
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                    },
+                )
+                NavigationBarItem(
+                    selected = selectedIndex == 3,
+                    onClick = {
+                        selectedIndex = 3
+                        navigateToPerawatanManagement()
+                    },
+                    icon = {
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(
+                                    color = Color(0xFFE3F2FD),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                                .padding(8.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.perawatan),
+                                contentDescription = "Perawatan",
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                    },
+                )
+            }
+        },
+        modifier = modifier.fillMaxSize()
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .height(150.dp)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(Color(0xFFE3F2FD), Color(0xFFBBDEFB))
+                        ),
+                        shape = RoundedCornerShape(16.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.home),
+                        contentDescription = "Logo",
+                        modifier = Modifier.size(80.dp)
+                    )
+                    Text(
+                        text = "Selamat Datang di Klinik Hewan",
+                        style = MaterialTheme.typography.bodySmall,
+                        textAlign = TextAlign.Center,
+                        color = Color(0xFF0D47A1)
+                    )
+                }
+            }
+            HomeStatus(
+                homeUiState = viewModel.psnUIState,
+                retryAction = { viewModel.getPsn() },
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxSize(),
+                onDetailClick = onDetailClick,
+                onEditClick = onEditClick,
+                onDeleteClick = {
+                    viewModel.deletePsn(it.id_hewan)
+                    viewModel.getPsn()
+                }
+            )
+        }
+    }
+}
 
 @Composable
 fun HomeStatus(
