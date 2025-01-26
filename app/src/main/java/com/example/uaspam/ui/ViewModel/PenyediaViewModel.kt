@@ -26,6 +26,7 @@ import com.example.uaspam.ui.ViewModel.Perawatan.UpdatePrwViewModel
 object PenyediaViewModel {
     val Factory = viewModelFactory {
         initializer { HomeViewModel(aplikasiHewan().container.pasienHewanRepository,aplikasiHewan().container.jenisHewanRepository)}
+        initializer { InsertViewModel(aplikasiHewan().container.pasienHewanRepository,aplikasiHewan().container.jenisHewanRepository) }
     }
 }
 
