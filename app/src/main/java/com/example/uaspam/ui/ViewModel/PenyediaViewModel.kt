@@ -33,6 +33,7 @@ object PenyediaViewModel {
         //JENIS HEWAN
         initializer { HomeJenisViewModel(aplikasiHewan().container.jenisHewanRepository) }
         initializer { InsertJenisViewModel(aplikasiHewan().container.jenisHewanRepository) }
+        initializer { UpdateJenisViewModel(createSavedStateHandle(),aplikasiHewan().container.jenisHewanRepository) }
 
     }
 }
