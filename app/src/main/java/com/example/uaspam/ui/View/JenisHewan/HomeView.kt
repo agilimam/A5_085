@@ -29,6 +29,29 @@ import com.example.uaspam.ui.ViewModel.JenisHewan.HomeJenisUiState
 import com.example.uaspam.ui.customwidget.CostumeTopAppBar
 import com.example.uaspam.ui.navigation.DestinasiHomeJenis
 
+@Composable
+fun JnsLayout(
+    jenishewan: List<Jenishewan>,
+    modifier: Modifier = Modifier,
+    onEditJenisClick: (Jenishewan) -> Unit,
+    onDeleteJenisClick: (Jenishewan) -> Unit = {}
+) {
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(jenishewan) { jenis ->
+            JnsCard(
+                jenishewan = jenis,
+                modifier = Modifier.fillMaxWidth(),
+                onEditJenisClick = { onEditJenisClick(it) },
+                onDeleteJenisClick = { onDeleteJenisClick(it) }
+            )
+        }
+    }
+}
 
 @Composable
 fun JnsCard(
