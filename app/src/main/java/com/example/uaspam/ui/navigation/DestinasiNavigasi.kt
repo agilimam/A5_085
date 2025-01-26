@@ -30,3 +30,23 @@ object DestinasiUpdate : DestinasiNavigasi {
     const val ID = "id_hewan"
     val routeWithArgs = "$route/{$ID}"
 }
+
+
+
+// JENIS HEWAN
+object DestinasiHomeJenis: DestinasiNavigasi{
+    override val route = "Home_Jenis"
+    override val titleRes = "Daftar Jenis Hewan"
+}
+
+object DestinasiEntryJenis :DestinasiNavigasi{
+    override val route = "Insert_Jenis"
+    override val titleRes = "Masukkan Jenis Hewan"
+}
+
+object DestinasiJenisUpdate: DestinasiNavigasi{
+    override val route = "update_Jenis"
+    override val titleRes = "Edit Jenis Hewan"
+    const val ID = "id_jenis_hewan"
+    val routeWithArgs = "$route/{$ID}"
+}
