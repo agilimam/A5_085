@@ -31,6 +31,39 @@ import com.example.uaspam.ui.navigation.DestinasiHomeJenis
 
 
 @Composable
+fun HomeStatus(
+    homeJenisUiState: HomeJenisUiState,
+    retryAction: () -> Unit,
+    modifier: Modifier = Modifier,
+    onDeleteJenisClick: (Jenishewan) -> Unit,
+    onEditJenisClick: (Jenishewan) -> Unit
+) {
+    when (homeJenisUiState) {
+        is HomeJenisUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
+        is HomeJenisUiState.Success -> {
+            if (homeJenisUiState.jenishewan.isEmpty()) {
+                Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(
+                        text = "Tidak ada data Jenis Hewan",
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+            } else {
+                JnsLayout(
+                    jenishewan = homeJenisUiState.jenishewan,
+                    modifier = modifier,
+                    onDeleteJenisClick = {onDeleteJenisClick(it)},
+                    onEditJenisClick = {onEditJenisClick(it)}
+                )
+            }
+        }
+        is HomeJenisUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
+    }
+}
+
+
+@Composable
 fun OnLoading(
     modifier: Modifier = Modifier
 ) {
