@@ -29,6 +29,33 @@ import com.example.uaspam.ui.navigation.DestinasiEntryJenis
 import kotlinx.coroutines.launch
 
 
+
+@Composable
+fun EntryBodyJenis(
+    insertJenisUiState: InsertJenisUiState,
+    onJenisValueChange: (InsertJenisUiEvent) -> Unit,
+    onSaveClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(18.dp),
+        modifier = modifier.padding(12.dp)
+    ) {
+        FormInput(
+            insertJenisUiEvent = insertJenisUiState.insertJenisUiEvent,
+            onValueChange = onJenisValueChange,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Button(
+            onClick = onSaveClick,
+            shape = MaterialTheme.shapes.small,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = "Simpan")
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormInput(
