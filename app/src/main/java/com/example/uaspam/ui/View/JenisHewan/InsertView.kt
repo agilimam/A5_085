@@ -29,6 +29,43 @@ import com.example.uaspam.ui.navigation.DestinasiEntryJenis
 import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EntryJnsScreen(
+    navigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: InsertJenisViewModel = viewModel(factory = PenyediaViewModel.Factory)
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    Scaffold(
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            CostumeTopAppBar(
+                title = DestinasiEntryJenis.titleRes,
+                canNavigateBack = true,
+                scrollBehavior = scrollBehavior,
+                navigateUp = navigateBack
+            )
+        }
+    ) { innerPadding ->
+        EntryBodyJenis(
+            insertJenisUiState = viewModel.uiState,
+            onJenisValueChange = viewModel::updateInsertJnsState,
+            onSaveClick = {
+                coroutineScope.launch {
+                    viewModel.insertJns()
+                    navigateBack()
+                }
+            },
+            modifier = Modifier
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .fillMaxWidth()
+        )
+
+    }
+}
 
 @Composable
 fun EntryBodyJenis(
