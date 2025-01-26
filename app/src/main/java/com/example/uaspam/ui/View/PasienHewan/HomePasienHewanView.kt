@@ -34,6 +34,52 @@ import com.example.uaspam.ui.ViewModel.PasienHewan.HomeViewModel
 import com.example.uaspam.ui.customwidget.CostumeTopAppBar
 import com.example.uaspam.ui.navigation.DestinasiHome
 
+
+@Composable
+fun OnLoading(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Image(
+                modifier = Modifier.size(150.dp),
+                painter = painterResource(R.drawable.loading),
+                contentDescription = stringResource(R.string.loading)
+            )
+            Text(text = "Loading...", style = MaterialTheme.typography.bodyLarge)
+        }
+    }
+}
+
+@Composable
+fun OnError(
+    retryAction: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Image(
+                painter = painterResource(id = R.drawable.eror), contentDescription = ""
+            )
+            Text(
+                text = stringResource(R.string.loading_failed),
+                modifier = Modifier.padding(16.dp),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Button(onClick = retryAction) {
+                Text(stringResource(R.string.retry))
+            }
+        }
+    }
+}
+
 @Composable
 fun PsnLayout(
     pasienHewan: List<PasienHewan>,
