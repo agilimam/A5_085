@@ -32,6 +32,48 @@ import com.example.uaspam.ui.customwidget.CostumeTopAppBar
 import com.example.uaspam.ui.navigation.DestinasiDetail
 
 
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DetailScreen(
+    navigateBack: () -> Unit,
+    onEditClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: DetailViewModel = viewModel(factory = PenyediaViewModel.Factory)
+) {
+    Scaffold(
+        topBar = {
+            CostumeTopAppBar(
+                title = DestinasiDetail.titleRes,
+                canNavigateBack = true,
+                navigateUp = navigateBack,
+                onRefresh = {
+                    viewModel.getPasienHewanById()
+                }
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = onEditClick,
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier.padding(18.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Tambah Perawatan"
+                )
+            }
+        }
+    ) { innerPadding ->
+        DetailStatus(
+            modifier = Modifier.padding(innerPadding),
+            detailUiState = viewModel.detailUiState,
+            retryAction = { viewModel.getPasienHewanById() }
+        )
+    }
+}
+
+
 @Composable
 fun DetailStatus(
     retryAction: () -> Unit,
