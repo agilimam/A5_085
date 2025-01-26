@@ -28,8 +28,47 @@ import com.example.uaspam.ui.ViewModel.PasienHewan.InsertViewModel
 import com.example.uaspam.ui.ViewModel.PenyediaViewModel
 import com.example.uaspam.ui.customwidget.CostumeTopAppBar
 import com.example.uaspam.ui.navigation.DestinasiEntry
+
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EntryPsnScreen(
+    navigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: InsertViewModel = viewModel(factory = PenyediaViewModel.Factory)
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    Scaffold(
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            CostumeTopAppBar(
+                title = DestinasiEntry.titleRes,
+                canNavigateBack = true,
+                scrollBehavior = scrollBehavior,
+                navigateUp = navigateBack
+            )
+        }
+    ) { innerPadding ->
+        EntryBody(
+            insertUiState = viewModel.uiState,
+            jnsList =viewModel.jnsList,
+            onPasienValueChange = viewModel::updateInsertPsnState,
+            onSaveClick = {
+                coroutineScope.launch {
+                    viewModel.insertPsn()
+                    navigateBack()
+                }
+            },
+            modifier = Modifier
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .fillMaxWidth()
+        )
+
+    }
+}
 @Composable
 fun EntryBody(
     insertUiState: InsertUiState,
