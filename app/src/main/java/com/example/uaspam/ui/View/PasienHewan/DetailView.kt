@@ -32,6 +32,37 @@ import com.example.uaspam.ui.customwidget.CostumeTopAppBar
 import com.example.uaspam.ui.navigation.DestinasiDetail
 
 
+@Composable
+fun DetailStatus(
+    retryAction: () -> Unit,
+    viewModel: DetailViewModel = viewModel(factory = PenyediaViewModel.Factory),
+
+    modifier: Modifier = Modifier,
+    detailUiState: DetailUiState
+) {
+    when (detailUiState) {
+        is DetailUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
+
+        is DetailUiState.Success -> {
+            if (detailUiState.pasienHewan.data.id_hewan == 0) {
+                Box(
+                    modifier = modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Data tidak ditemukan.")
+                }
+            } else {
+                ItemDetailPsn(
+                    pasienHewan = detailUiState.pasienHewan.data,
+                    modifier = modifier.fillMaxWidth(),
+                    jnsList = viewModel.jnsList
+                )
+            }
+        }
+
+        is DetailUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
+    }
+}
 
 @Composable
 fun ItemDetailPsn(
