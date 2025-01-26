@@ -36,6 +36,42 @@ import com.example.uaspam.ui.navigation.DestinasiHome
 
 
 @Composable
+fun HomeStatus(
+    homeUiState: HomeUiState,
+    retryAction: () -> Unit,
+    modifier: Modifier = Modifier,
+    onDeleteClick: (PasienHewan) -> Unit = {},
+    onDetailClick: (Int) -> Unit,
+    onEditClick: (PasienHewan) -> Unit = {}
+) {
+    when (homeUiState) {
+        is HomeUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
+        is HomeUiState.Success -> {
+            if (homeUiState.pasienHewan.isEmpty()) {
+                Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(
+                        text = "Tidak ada data Pasien Hewan",
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+            } else {
+                PsnLayout(
+                    pasienHewan = homeUiState.pasienHewan,
+                    modifier = modifier,
+                    onDetailClick = { onDetailClick(it.id_hewan) },
+                    onEditClick = { onEditClick(it) },
+                    onDeleteClick = { onDeleteClick(it) }
+                )
+            }
+        }
+        is HomeUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
+    }
+}
+
+
+
+@Composable
 fun OnLoading(
     modifier: Modifier = Modifier
 ) {
