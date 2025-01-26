@@ -29,6 +29,111 @@ import com.example.uaspam.ui.ViewModel.JenisHewan.HomeJenisUiState
 import com.example.uaspam.ui.customwidget.CostumeTopAppBar
 import com.example.uaspam.ui.navigation.DestinasiHomeJenis
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeJenisScreen(
+    navigateToItemEntry: () -> Unit,
+    modifier: Modifier = Modifier,
+    navigateBack: () ->Unit,
+    onEditJenisClick: (Jenishewan) -> Unit = {},
+    viewModel: HomeJenisViewModel = viewModel(factory = PenyediaViewModel.Factory)
+) {
+    var selectedIndex by remember { mutableStateOf(0) }
+    Scaffold(
+        topBar = {
+            CostumeTopAppBar(
+                title = DestinasiHomeJenis.titleRes,
+                canNavigateBack = true,
+                navigateUp = navigateBack,
+                onRefresh = { viewModel.getJns() }
+            )
+        },
+        bottomBar = {
+            NavigationBar(
+                containerColor = Color(0xFFBBDEFB),
+            ) {
+                NavigationBarItem(
+                    selected = selectedIndex == 0,
+                    onClick = {
+                        selectedIndex = 0
+                        navigateToItemEntry()
+                    },
+                    icon = {
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(
+                                    color = Color(0xFFE3F2FD),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                                .padding(8.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.jenishewan),
+                                contentDescription = "Tambah jenis Hewan",
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                    },
+                )
+            }
+        },
+        modifier = modifier.fillMaxSize()
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .height(150.dp)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(Color(0xFFE3F2FD), Color(0xFFBBDEFB)) // Gradasi biru muda
+                        ),
+                        shape = RoundedCornerShape(16.dp) // Sudut membulat
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // Perbesar ukuran logo
+                    Image(
+                        painter = painterResource(id = R.drawable.jenishewan), // Logo klinik
+                        contentDescription = "Logo",
+                        modifier = Modifier
+                            .size(100.dp) // Ukuran logo lebih besar
+                    )
+                    Text(
+                        text = "Selamat Datang di Daftar Jenis Hewan",
+                        style = MaterialTheme.typography.bodySmall,
+                        textAlign = TextAlign.Center,
+                        color = Color(0xFF0D47A1) // Warna teks biru gelap
+                    )
+                }
+            }
+
+            HomeStatus(
+                homeJenisUiState = viewModel.jnsUIState,
+                retryAction = { viewModel.getJns() },
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxSize(),
+                onEditJenisClick = onEditJenisClick,
+                onDeleteJenisClick = {
+                    viewModel.deleteJns(it.id_jenis_hewan)
+                    viewModel.getJns()
+                }
+            )
+
+        }
+    }
+}
+
 
 @Composable
 fun HomeStatus(
