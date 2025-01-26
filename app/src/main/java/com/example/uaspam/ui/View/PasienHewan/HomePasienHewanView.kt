@@ -34,6 +34,34 @@ import com.example.uaspam.ui.ViewModel.PasienHewan.HomeViewModel
 import com.example.uaspam.ui.customwidget.CostumeTopAppBar
 import com.example.uaspam.ui.navigation.DestinasiHome
 
+@Composable
+fun PsnLayout(
+    pasienHewan: List<PasienHewan>,
+    modifier: Modifier = Modifier,
+    onDetailClick: (PasienHewan) -> Unit,
+    onEditClick: (PasienHewan) -> Unit = {},
+    onDeleteClick: (PasienHewan) -> Unit = {} ,
+    viewModel: HomeViewModel = viewModel(factory = PenyediaViewModel.Factory),
+) {
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(pasienHewan) { hewan ->
+            PsnCard(
+                pasienHewan = hewan,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                onDetailClick = { onDetailClick(it) },
+                onEditClick = { onEditClick(it) },
+                jnsList = viewModel.jnsList,
+                onDeleteClick = { onDeleteClick(it) }
+            )
+        }
+    }
+}
 
 @Composable
 fun PsnCard(
