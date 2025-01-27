@@ -37,6 +37,7 @@ object PenyediaViewModel {
 
         //Dokter
         initializer { HomeDokterViewModel(aplikasiHewan().container.dokterRepository) }
+        initializer { InsertDokterViewModel(aplikasiHewan().container.dokterRepository) }
 
     }
 }
