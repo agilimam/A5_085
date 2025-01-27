@@ -31,8 +31,6 @@ object DestinasiUpdate : DestinasiNavigasi {
     val routeWithArgs = "$route/{$ID}"
 }
 
-
-
 // JENIS HEWAN
 object DestinasiHomeJenis: DestinasiNavigasi{
     override val route = "Home_Jenis"
@@ -48,5 +46,23 @@ object DestinasiJenisUpdate: DestinasiNavigasi{
     override val route = "update_Jenis"
     override val titleRes = "Edit Jenis Hewan"
     const val ID = "id_jenis_hewan"
+    val routeWithArgs = "$route/{$ID}"
+}
+
+// DOKTER
+object DestinasiHomeDokter: DestinasiNavigasi{
+    override val route = "Home_Dokter"
+    override val titleRes = "Daftar Dokter"
+}
+
+object DestinasiEntryDokter :DestinasiNavigasi{
+    override val route = "Insert_Dokter"
+    override val titleRes ="Masukkan Dokter"
+}
+
+object DestinasiDokterUpdate: DestinasiNavigasi{
+    override val route = "update_Dokter"
+    override val titleRes = "Edit Dokter"
+    const val ID = "id_dokter"
     val routeWithArgs = "$route/{$ID}"
 }
