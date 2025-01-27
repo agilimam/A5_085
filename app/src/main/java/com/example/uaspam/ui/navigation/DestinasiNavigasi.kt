@@ -66,3 +66,28 @@ object DestinasiDokterUpdate: DestinasiNavigasi{
     const val ID = "id_dokter"
     val routeWithArgs = "$route/{$ID}"
 }
+
+//PERAWATAN
+object DestinasiHomePerawatan : DestinasiNavigasi {
+    override val route = "home_perawatan"
+    override val titleRes = "Daftar Perawatan"
+}
+
+object DestinasiEntryPerawatan : DestinasiNavigasi {
+    override val route = "insert_perawatan"
+    override val titleRes = "Masukkan Data Perawatan"
+}
+
+object DestinasiDetailPerawatan : DestinasiNavigasi {
+    override val route = "detail_perawatan"
+    override val titleRes = "Detail Perawatan"
+    const val ID = "id_perawatan"
+    val routeWithArgs = "$route/{$ID}"
+}
+
+object DestinasiUpdatePerawatan : DestinasiNavigasi {
+    override val route = "update_perawatan"
+    override val titleRes = "Edit Perawatan"
+    const val ID = "id_perawatan"
+    val routeWithArgs = "$route/{$ID}"
+}
