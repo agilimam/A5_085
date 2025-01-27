@@ -40,6 +40,9 @@ object PenyediaViewModel {
         initializer { InsertDokterViewModel(aplikasiHewan().container.dokterRepository) }
         initializer { UpdateDokterViewModel(createSavedStateHandle(),aplikasiHewan().container.dokterRepository) }
 
+        //Perawatan
+        initializer { HomePerawatanViewModel(aplikasiHewan().container.perawatanRepository,aplikasiHewan().container.pasienHewanRepository,aplikasiHewan().container.dokterRepository) }
+
     }
 }
 
