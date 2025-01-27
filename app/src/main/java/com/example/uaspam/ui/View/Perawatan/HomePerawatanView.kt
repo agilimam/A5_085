@@ -52,6 +52,218 @@ import com.example.uaspam.ui.ViewModel.Perawatan.HomePrwUiState
 import com.example.uaspam.ui.customwidget.CostumeTopAppBar
 import com.example.uaspam.ui.navigation.DestinasiHomePerawatan
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomePrwScreen(
+    navigateToItemEntryPrw: () -> Unit,
+    navigateToItemEntryDk: () ->Unit,
+    modifier: Modifier = Modifier,
+    navigateBack: () -> Unit,
+    onEditPrwClick: (Perawatan) -> Unit = {},
+    onDetailPrwClick: (Int) -> Unit = {},
+    viewModel: HomePerawatanViewModel = viewModel(factory = PenyediaViewModel.Factory)
+) {
+    var selectedIndex by remember { mutableStateOf(0) }
+    Scaffold(
+        topBar = {
+            CostumeTopAppBar(
+                title = DestinasiHomePerawatan.titleRes,
+                canNavigateBack = true,
+                navigateUp = navigateBack,
+                onRefresh = { viewModel.getPrw() }
+            )
+        },
+        bottomBar = {
+            NavigationBar(
+                containerColor = Color(0xFFBBDEFB),
+            ) {
+                NavigationBarItem(
+                    selected = selectedIndex == 0,
+                    onClick = {
+                        selectedIndex = 0
+                        navigateToItemEntryPrw()
+                    },
+                    icon = {
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(
+                                    color = Color(0xFFE3F2FD),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                                .padding(8.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.perawatan),
+                                contentDescription = "Tambah Perawatan",
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                    },
+                )
+                NavigationBarItem(
+                    selected = selectedIndex == 1,
+                    onClick = {
+                        selectedIndex = 1
+                        navigateToItemEntryDk()
+                    },
+                    icon = {
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(
+                                    color = Color(0xFFE3F2FD),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                                .padding(8.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.dokter),
+                                contentDescription = "Tambah Dokter",
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                    },
+                )
+            }
+        },
+        modifier = modifier.fillMaxSize()
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .height(150.dp)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(Color(0xFFE3F2FD), Color(0xFFBBDEFB)) // Gradasi biru muda
+                        ),
+                        shape = RoundedCornerShape(16.dp) // Sudut membulat
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // Perbesar ukuran logo
+                    Image(
+                        painter = painterResource(id = R.drawable.perawatan), // Logo klinik
+                        contentDescription = "Logo",
+                        modifier = Modifier
+                            .size(100.dp) // Ukuran logo lebih besar
+                    )
+                    Text(
+                        text = "Selamat Datang di Daftar Perawatan",
+                        style = MaterialTheme.typography.bodySmall,
+                        textAlign = TextAlign.Center,
+                        color = Color(0xFF0D47A1) // Warna teks biru gelap
+                    )
+                }
+            }
+
+            HomeStatusPrw(
+                homePrwUiState = viewModel.prwUIState,
+                retryAction = { viewModel.getPrw() },
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxSize(),
+                onEditPrwClick = onEditPrwClick,
+                onDetailPrwClick = onDetailPrwClick,
+                onDeletePrwClick = {
+                    viewModel.deletePrw(it.id_perawatan)
+                    viewModel.getPrw()
+                }
+            )
+        }
+    }
+}
+
+
+
+@Composable
+fun HomeStatusPrw(
+    homePrwUiState: HomePrwUiState,
+    retryAction: () -> Unit,
+    modifier: Modifier = Modifier,
+    onDetailPrwClick: (Int) -> Unit,
+    onDeletePrwClick: (Perawatan) -> Unit,
+    onEditPrwClick: (Perawatan) -> Unit
+) {
+    when (homePrwUiState) {
+        is HomePrwUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
+        is HomePrwUiState.Success -> {
+            if (homePrwUiState.perawatan.isEmpty()) {
+                Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(
+                        text = "Tidak ada data Perawatan",
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+            } else {
+                PrwLayout(
+                    perawatan = homePrwUiState.perawatan,
+                    modifier = modifier,
+                    onDeletePrwClick = {onDeletePrwClick(it)},
+                    onDetailPrwClick = {onDetailPrwClick(it.id_perawatan)},
+                    onEditPrwClick = {onEditPrwClick(it)}
+                )
+            }
+        }
+        is HomePrwUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
+    }
+}
+
+
+@Composable
+fun OnLoading(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Image(
+                modifier = Modifier.size(150.dp),
+                painter = painterResource(R.drawable.loading),
+                contentDescription = stringResource(R.string.loading)
+            )
+            Text(text = "Loading...", style = MaterialTheme.typography.bodyLarge)
+        }
+    }
+}
+
+@Composable
+fun OnError(
+    retryAction: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Image(
+                painter = painterResource(id = R.drawable.eror), contentDescription = ""
+            )
+            Text(
+                text = stringResource(R.string.loading_failed),
+                modifier = Modifier.padding(16.dp),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Button(onClick = retryAction) {
+                Text(stringResource(R.string.retry))
+            }
+        }
+    }
+}
 
 @Composable
 fun PrwLayout(
