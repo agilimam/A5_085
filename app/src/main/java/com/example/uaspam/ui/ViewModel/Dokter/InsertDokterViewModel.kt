@@ -6,11 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.uaspam.model.Dokter
-import com.example.uaspam.model.Jenishewan
 import com.example.uaspam.repository.DokterRepository
-import com.example.uaspam.repository.JenisHewanRepository
 import kotlinx.coroutines.launch
-
 
 class InsertDokterViewModel (private val Dk : DokterRepository) : ViewModel() {
 
@@ -51,6 +48,8 @@ fun InsertDkUiEvent.toDk(): Dokter = Dokter (
     kontak = kontak,
 
     )
+
+
 
 fun Dokter.toUiStateDk(): InsertDkUiState = InsertDkUiState(
     insertDkUiEvent = toInsertDkUiEvent()
