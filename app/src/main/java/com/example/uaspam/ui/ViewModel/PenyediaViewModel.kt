@@ -43,6 +43,7 @@ object PenyediaViewModel {
         //Perawatan
         initializer { HomePerawatanViewModel(aplikasiHewan().container.perawatanRepository,aplikasiHewan().container.pasienHewanRepository,aplikasiHewan().container.dokterRepository) }
         initializer { InsertPrwViewModel(aplikasiHewan().container.perawatanRepository,aplikasiHewan().container.pasienHewanRepository,aplikasiHewan().container.dokterRepository) }
+        initializer { DetailPrwViewModel(createSavedStateHandle(),aplikasiHewan().container.perawatanRepository,aplikasiHewan().container.pasienHewanRepository,aplikasiHewan().container.dokterRepository) }
         initializer { UpdatePrwViewModel(createSavedStateHandle(),aplikasiHewan().container.perawatanRepository,aplikasiHewan().container.pasienHewanRepository,aplikasiHewan().container.dokterRepository) }
 
     }
